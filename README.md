@@ -1,7 +1,6 @@
-````markdown
 # C++ Image Edge and Feature Detector
 
-A C++11-based computer vision project that implements **Sobel edge detection from scratch** and provides a simple Windows GUI for visualizing the original image, detected edges, image statistics, and edge bounding box.
+A C++11-based computer vision project that implements **Sobel edge detection from scratch** and provides a simple Windows GUI for visualizing the original image, detected edges, image statistics, processing time, and the detected edge bounding box.
 
 The project is implemented without OpenCV or other external image-processing libraries.
 
@@ -11,31 +10,29 @@ The project is implemented without OpenCV or other external image-processing lib
 
 ### Edge Detection GUI
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/238d5a21-6f3f-4c0a-8a8f-a322e39c936e" />
-
+<img width="1920" height="1080" alt="Edge Detection GUI" src="https://github.com/user-attachments/assets/238d5a21-6f3f-4c0a-8a8f-a322e39c936e" />
 
 ### Original Image
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2c4e0708-4050-4736-8399-f995c933edaa" />
-
+<img width="1920" height="1080" alt="Original Image" src="https://github.com/user-attachments/assets/2c4e0708-4050-4736-8399-f995c933edaa" />
 
 ### Detected Edges
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4308a097-6a39-4421-bcf5-46aec4a7e9d0" />
+<img width="1920" height="1080" alt="Detected Edges" src="https://github.com/user-attachments/assets/4308a097-6a39-4421-bcf5-46aec4a7e9d0" />
 
 ---
 
 ## 🚀 Project Overview
 
-Edge detection is an important basic operation in computer vision and image processing.
+Edge detection is a fundamental operation in computer vision and image processing.
 
-Edges usually represent locations where image intensity changes significantly, such as:
+Edges generally occur where there is a significant change in image intensity. They can represent:
 
-- Object boundaries
-- Shapes
-- Lines
-- Corners
-- Texture changes
+* Object boundaries
+* Shapes
+* Lines
+* Corners
+* Texture changes
 
 This project implements the **Sobel edge detection algorithm manually in C++**.
 
@@ -67,17 +64,17 @@ Edge Statistics
        |
        v
 Bounding Box
-````
+```
 
 ---
 
-# ✨ Features
+## ✨ Features
 
 * P3 ASCII PPM image loading
 * RGB to grayscale conversion
 * Manual Sobel edge detection
-* Horizontal gradient calculation
-* Vertical gradient calculation
+* Horizontal gradient calculation (`Gx`)
+* Vertical gradient calculation (`Gy`)
 * Edge magnitude calculation
 * Configurable edge threshold
 * Binary edge image generation
@@ -93,7 +90,7 @@ Bounding Box
 
 ---
 
-# 🛠️ Technologies Used
+## 🛠️ Technologies Used
 
 * **C++11**
 * **MinGW GCC 6.3.0**
@@ -103,15 +100,15 @@ Bounding Box
 * **GDI**
 * **P3 ASCII PPM**
 
-No OpenCV, CMake, Qt, CUDA, or other external libraries are required.
+No OpenCV, CMake, Qt, CUDA, or other external image-processing libraries are required.
 
 ---
 
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```text
 image-edge-detector/
-│
+|
 ├── include/
 │   ├── image.h
 │   ├── edge_detector.h
@@ -137,11 +134,11 @@ image-edge-detector/
 
 ---
 
-# 🔍 How the Algorithm Works
+# 🔍 Image Processing Pipeline
 
-## 1. RGB to Grayscale
+## 1. RGB Image
 
-The original image contains three color channels:
+The input image contains three color channels:
 
 ```text
 R = Red
@@ -149,9 +146,15 @@ G = Green
 B = Blue
 ```
 
-For edge detection, the image is first converted into a single grayscale intensity value.
+The program loads the image as RGB pixel data.
 
-The project uses a weighted RGB-to-grayscale conversion:
+---
+
+## 2. RGB to Grayscale
+
+Before applying the Sobel operator, the RGB image is converted into a grayscale image.
+
+The grayscale value is calculated using:
 
 ```text
 Gray = 0.299R + 0.587G + 0.114B
@@ -159,11 +162,13 @@ Gray = 0.299R + 0.587G + 0.114B
 
 This produces a single intensity value for each pixel.
 
+Using grayscale simplifies the edge-detection process because the Sobel operator operates on image intensity.
+
 ---
 
-# 2. Sobel Edge Detection
+## 3. Sobel Operator
 
-The Sobel operator uses two 3×3 convolution kernels.
+The Sobel operator uses two 3 × 3 convolution kernels.
 
 ### Horizontal Gradient — Gx
 
@@ -181,7 +186,7 @@ The Sobel operator uses two 3×3 convolution kernels.
  1   2   1
 ```
 
-For every pixel, the surrounding 3×3 neighborhood is multiplied by the corresponding kernel values.
+For every pixel, the surrounding 3 × 3 neighborhood is multiplied by the corresponding kernel values.
 
 The results are summed to calculate:
 
@@ -190,30 +195,30 @@ Gx
 Gy
 ```
 
+`Gx` represents the horizontal intensity gradient, while `Gy` represents the vertical intensity gradient.
+
 ---
 
-# 3. Edge Magnitude
+## 4. Edge Magnitude
 
-After calculating the horizontal and vertical gradients, the edge strength is calculated using:
+After calculating `Gx` and `Gy`, the program calculates the edge magnitude:
 
 ```text
 Magnitude = sqrt(Gx² + Gy²)
 ```
 
-A larger magnitude indicates a stronger intensity change.
-
-For example:
+A larger magnitude represents a stronger change in image intensity.
 
 ```text
-Small magnitude  → weak edge
-Large magnitude  → strong edge
+Small magnitude  -> weak edge
+Large magnitude  -> strong edge
 ```
 
 ---
 
-# 4. Thresholding
+## 5. Thresholding
 
-The calculated edge magnitude is compared against a configurable threshold.
+The edge magnitude is compared against a configurable threshold.
 
 Conceptually:
 
@@ -228,17 +233,19 @@ else
     NOT AN EDGE
 ```
 
-This converts the grayscale edge-strength image into a binary edge image.
+This converts the edge-strength image into a binary edge image.
 
 The threshold can be changed from the GUI.
 
 ---
 
-# 5. Edge Statistics
+# 📊 Image Statistics
 
-The program calculates several statistics after edge detection.
+The application calculates several statistics after edge detection.
 
 ### Resolution
+
+The width and height of the input image.
 
 Example:
 
@@ -248,15 +255,19 @@ Example:
 
 ### Total Pixels
 
+Calculated as:
+
 ```text
-width × height
+Total Pixels = Width × Height
 ```
 
 ### Edge Pixels
 
-Number of pixels whose edge magnitude is greater than or equal to the selected threshold.
+The number of pixels whose calculated edge magnitude is greater than or equal to the selected threshold.
 
 ### Edge Percentage
+
+Calculated as:
 
 ```text
 Edge Percentage =
@@ -265,7 +276,7 @@ Edge Percentage =
 
 ### Average Edge Strength
 
-The average magnitude of the detected edge pixels.
+The average edge magnitude of the detected edge pixels.
 
 ### Processing Time
 
@@ -273,11 +284,11 @@ The program measures the time required for the Sobel processing and thresholding
 
 ---
 
-# 6. Edge Bounding Box
+# 📦 Edge Bounding Box
 
-The program also calculates the bounding box around detected edge pixels.
+The program calculates a bounding box around the detected edge pixels.
 
-The bounding box contains:
+It tracks:
 
 ```text
 Minimum X
@@ -290,83 +301,71 @@ For example:
 
 ```text
 Bounding Box:
-
 X = 20 .. 800
 Y = 30 .. 600
 ```
 
-This provides a simple way to describe the region containing detected edges.
+This provides a simple representation of the region containing the detected edges.
 
 ---
 
 # 🖥️ GUI
 
-The project uses the Windows **Win32 API and GDI** for the graphical interface.
+The graphical interface is implemented using:
+
+* Windows Win32 API
+* GDI
 
 The GUI provides:
 
-```text
-+----------------------------------------------------------+
-|             C++ IMAGE EDGE DETECTOR                      |
-+----------------------------------------------------------+
-|                                                          |
-|   ORIGINAL IMAGE             EDGE IMAGE                 |
-|                                                          |
-|   +---------------+          +---------------+           |
-|   |               |          |               |           |
-|   |    ORIGINAL   |   --->   |     EDGES     |           |
-|   |               |          |               |           |
-|   +---------------+          +---------------+           |
-|                                                          |
-|   Resolution:                                            |
-|   Edge Pixels:                                           |
-|   Edge Percentage:                                       |
-|   Average Edge Strength:                                 |
-|   Processing Time:                                       |
-|   Bounding Box:                                          |
-|                                                          |
-|   Threshold: [ 100 ]                                     |
-|                                                          |
-|   [ Load Image ] [ Detect Edges ] [ Save Result ]        |
-|                                                          |
-+----------------------------------------------------------+
-<img width="1408" height="768" alt="Gemini_Generated_Image_ddtnedddtnedddtn" src="https://github.com/user-attachments/assets/7071f0d7-eed7-4d48-95f6-e978328dcff1" />
+* Load Image
+* Detect Edges
+* Save Result
+* Threshold input
+* Original image display
+* Edge image display
+* Image statistics
+* Processing time
+* Bounding-box information
 
-```
-
-The GUI is intentionally simple so that the image-processing algorithm remains the main focus.
+The interface is intentionally simple so that the image-processing algorithm remains the main focus.
 
 ---
 
 # 🧪 Self-Test
 
-The project includes a simple self-test mode without GoogleTest.
+The project includes a simple self-test system without GoogleTest.
 
-Run:
+The self-tests are implemented in:
+
+```text
+self_test.cpp
+self_test.h
+```
+
+Run the tests using:
 
 ```cmd
 image-edge-detector.exe --test
 ```
 
-The tests check the core functionality such as:
+The tests cover important parts of the image-processing pipeline, including:
 
 * Image creation
 * Image loading
 * Grayscale conversion
 * Sobel processing
 * Thresholding
-* Edge statistics
+* Statistics
 * Bounding-box calculation
-
-This provides a simple way to verify the processing logic without opening the GUI.
 
 ---
 
-# ⚙️ Performance Measurement
+# ⏱️ Performance Measurement
 
 The project uses C++ timing facilities to measure processing time.
 
-The measured operation includes the main edge-processing work:
+The main measured processing consists of:
 
 ```text
 Sobel Processing
@@ -374,7 +373,7 @@ Sobel Processing
 Thresholding
 ```
 
-The project does not use hard-coded performance values.
+The measured processing time is displayed in the GUI.
 
 Actual processing time depends on:
 
@@ -384,11 +383,13 @@ Actual processing time depends on:
 * Operating system
 * Current system load
 
+No fixed performance numbers are hard-coded into the project.
+
 ---
 
 # 🖼️ Input Format
 
-The current implementation uses:
+The current implementation supports:
 
 ```text
 P3 ASCII PPM
@@ -401,12 +402,14 @@ P3
 8 8
 255
 255 0 0
+0 255 0
+0 0 255
 ...
 ```
 
-The project intentionally uses PPM so that image loading can be implemented without external libraries.
+PPM was selected so that the image-loading implementation could remain simple and dependency-free.
 
-JPEG and PNG are not currently supported.
+Currently, JPEG and PNG images are not supported.
 
 ---
 
@@ -414,14 +417,12 @@ JPEG and PNG are not currently supported.
 
 Processed edge images are saved as PPM files.
 
-Example:
+Example output files:
 
 ```text
 data/output/edges.ppm
 data/output/edges2.ppm
 ```
-
-The output represents the detected edges after thresholding.
 
 ---
 
@@ -440,7 +441,7 @@ Check the compiler:
 g++ --version
 ```
 
-Expected compiler:
+Expected compiler version:
 
 ```text
 g++ (MinGW.org GCC-6.3.0-1) 6.3.0
@@ -448,25 +449,43 @@ g++ (MinGW.org GCC-6.3.0-1) 6.3.0
 
 ---
 
-## Compile
-
-Open Windows CMD and navigate to the project directory:
+## Clone the Repository
 
 ```cmd
-cd "C:\project\Camera ROle Qualcomm\Project3\image-edge-detector"
+git clone https://github.com/Nageshkumar01/image-edge-detector.git
 ```
 
-Compile:
+Enter the project directory:
+
+```cmd
+cd image-edge-detector
+```
+
+---
+
+## Compile
+
+Run:
 
 ```cmd
 g++ -std=c++11 -Wall -Wextra -Iinclude main.cpp self_test.cpp src\image.cpp src\edge_detector.cpp gui\gui.cpp -o image-edge-detector.exe -lgdi32 -luser32 -lcomdlg32
 ```
 
-If compilation succeeds, the executable will be created:
+The required Windows libraries are:
+
+```text
+-lgdi32
+-luser32
+-lcomdlg32
+```
+
+After successful compilation:
 
 ```text
 image-edge-detector.exe
 ```
+
+will be created.
 
 ---
 
@@ -480,54 +499,62 @@ image-edge-detector.exe
 
 The Windows GUI should open.
 
-The typical workflow is:
+Typical workflow:
 
 ```text
 Load Image
-     ↓
+     |
+     v
 Select PPM Image
-     ↓
+     |
+     v
 Set Threshold
-     ↓
+     |
+     v
 Detect Edges
-     ↓
-View Statistics
-     ↓
+     |
+     v
+View Results
+     |
+     v
 Save Result
 ```
 
 ---
 
-# 🧪 Run Tests
+# 🧪 Run Self-Tests
 
-To run the built-in self-tests:
+Run:
 
 ```cmd
 image-edge-detector.exe --test
 ```
 
-The program should execute the tests and report their results in the terminal.
+This executes the built-in tests without requiring the GUI.
 
 ---
 
 # 🎯 Why I Built This
 
-I built this project to understand fundamental computer vision and image-processing concepts using C++ without relying on high-level image-processing frameworks.
+I built this project to understand fundamental computer vision and image-processing concepts using C++.
 
-The project focuses on understanding what happens at the pixel level during edge detection.
+Instead of relying on a high-level computer vision library, the main processing operations are implemented manually.
 
-Through this project I worked with:
+The project helped me understand:
 
 * Image representation
-* Grayscale conversion
+* RGB to grayscale conversion
 * Convolution
-* Sobel filters
+* Sobel filtering
 * Gradient calculation
+* Edge magnitude
 * Thresholding
 * Edge statistics
 * Bounding-box calculation
 * Performance measurement
 * GUI visualization
+
+---
 
 
 # ⚠️ Limitations
@@ -535,85 +562,95 @@ Through this project I worked with:
 Current limitations include:
 
 * Only P3 ASCII PPM images are supported
-* No JPEG or PNG support
+* JPEG and PNG are not supported
 * No physical camera input
-* Sobel processing is CPU-based
+* CPU-based image processing
 * No GPU acceleration
 * No DSP acceleration
 * No SIMD/NEON optimization
 * Windows-specific GUI
-* Basic Sobel edge detector
+* Basic Sobel-based edge detector
 * No advanced feature descriptors
 
 ---
 
 # 🔮 Future Improvements
 
-Possible future improvements:
+Possible future improvements include:
 
 * JPEG/PNG support
 * Real camera input
 * Canny edge detection
 * Harris corner detection
 * Hough line detection
-* Additional convolution filters
+* Gaussian filtering
 * Noise reduction
-* Gaussian blur
-* Multi-scale edge detection
 * Multithreaded processing
 * SIMD optimization
 * ARM NEON optimization
 * Linux support
 * Embedded camera integration
 * Hardware acceleration
+* Additional computer-vision algorithms
 
 ---
 
-# 📚 Interview Concepts Demonstrated
+# 💡 Interview Concepts
 
-This project provides practical examples of:
+This project demonstrates practical understanding of several important image-processing concepts.
 
-### Grayscale
+### Why grayscale?
 
-Converting a three-channel RGB image into a single intensity channel.
+Grayscale reduces a three-channel RGB image to a single intensity channel, making gradient and edge calculations simpler.
 
-### Convolution
+### What is convolution?
 
-Applying a kernel over a local neighborhood of pixels.
+Convolution applies a kernel to a local neighborhood of pixels to calculate a new value.
 
-### Sobel Operator
+### What is the Sobel operator?
 
-Using two kernels to calculate horizontal and vertical intensity gradients.
+The Sobel operator estimates image intensity gradients and is commonly used for detecting edges.
 
-### Edge Magnitude
+### Why are there two Sobel kernels?
 
-Combining the horizontal and vertical gradients to estimate edge strength.
+One kernel calculates the horizontal gradient (`Gx`) and the other calculates the vertical gradient (`Gy`).
 
-### Thresholding
+### What is edge magnitude?
 
-Converting continuous edge strength into a binary edge image.
+Edge magnitude combines the horizontal and vertical gradients:
 
-### Bounding Box
+```text
+Magnitude = sqrt(Gx² + Gy²)
+```
 
-Finding the minimum and maximum X/Y coordinates of detected edge pixels.
+### What does thresholding do?
 
-### Performance Measurement
+Thresholding determines whether an edge magnitude is strong enough to be classified as an edge.
 
-Using C++ timing facilities to measure processing time.
+### How is the bounding box calculated?
+
+The program tracks the minimum and maximum X and Y coordinates among detected edge pixels.
+
+### How is performance measured?
+
+The project uses C++ timing facilities around the Sobel processing and thresholding operations.
+
+### How could this be optimized for embedded hardware?
+
+Possible approaches include reducing memory copies, improving cache usage, processing pixels in parallel, using SIMD/NEON instructions, and using hardware-specific acceleration where available.
 
 ---
-
 
 # 📌 Project Status
 
 **Completed — Portfolio Project**
 
-The project currently includes:
+Current functionality:
 
 * [x] PPM image loading
-* [x] Grayscale conversion
-* [x] Sobel Gx calculation
-* [x] Sobel Gy calculation
+* [x] RGB to grayscale conversion
+* [x] Sobel Gx
+* [x] Sobel Gy
 * [x] Edge magnitude
 * [x] Thresholding
 * [x] Edge statistics
@@ -637,9 +674,8 @@ GitHub:
 
 ---
 
-## 🔗 Repository
+# 🔗 Repository
 
-**GitHub:**
 [https://github.com/Nageshkumar01/image-edge-detector](https://github.com/Nageshkumar01/image-edge-detector)
 
 ---
