@@ -11,19 +11,16 @@ The project is implemented without OpenCV or other external image-processing lib
 
 ### Edge Detection GUI
 
-![Edge Detector GUI](screenshots/gui.png)
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/238d5a21-6f3f-4c0a-8a8f-a322e39c936e" />
 
 
 ### Original Image
 
-![Original Image](screenshots/original.png)
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2c4e0708-4050-4736-8399-f995c933edaa" />
 
 
 ### Detected Edges
 
-![Detected Edges](screenshots/edges.png)
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4308a097-6a39-4421-bcf5-46aec4a7e9d0" />
 
 ---
@@ -333,6 +330,8 @@ The GUI provides:
 |   [ Load Image ] [ Detect Edges ] [ Save Result ]        |
 |                                                          |
 +----------------------------------------------------------+
+<img width="1408" height="768" alt="Gemini_Generated_Image_ddtnedddtnedddtn" src="https://github.com/user-attachments/assets/7071f0d7-eed7-4d48-95f6-e978328dcff1" />
+
 ```
 
 The GUI is intentionally simple so that the image-processing algorithm remains the main focus.
